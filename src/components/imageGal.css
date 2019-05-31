@@ -1,7 +1,15 @@
 .imageParent{
-
+  margin:.5em 0;
 }
 .theimage{
   width: 10em;
   height: 10em;
+}
+.thumbnails{
+  display: flex;
+  overflow-x: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
 }

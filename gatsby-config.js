@@ -10,7 +10,7 @@ module.exports = {
       resolve: "iGall",
       options: {
         key: "12647508-7ee9cbb94cb656b4a93efc443",
-        q: "red flowers",
+        q: "buildings",
       },
     },
     `gatsby-transformer-sharp`,

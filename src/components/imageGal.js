@@ -1,72 +1,46 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import "./imageGal.css";
-import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-class Gallery extends Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      modal: false,
-      imgData: null,
-    };
-    this.toggle = this.toggle.bind(this);
-  }
-  componentDidMount(){
-    this.setState({imgData:this.props.data});
+export default (props) => {
+  const [allImages, setAllImages] = useState(props.data.allPixabayPhoto.edges);
+  const [selectedImg, setSelectedImg] = useState(allImages[0].node.largeImageURL);
+  console.log(selectedImg);
+  // console.log(allImages[0].node.largeImageURL);
+
+  const renderFullImage = (url) => {
+    setSelectedImg(url);
+    console.log(selectedImg);
   }
 
-  toggle() {
-    this.setState(prevState => ({
-      modal: !prevState.modal
-    }));
-  }
-
-  renderFullImage (url){
-    console.log("he");
-    this.toggle();
-    console.log(this.state.modal);
-    return (
-      <>
-      <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-        <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
-        <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </ModalBody>
-      </Modal>
-      </>
+  const renderImages = () => {
+    if (allImages) {
+      return allImages.map(img => {
+        // console.log(img);
+        return (
+          <span key={img.id} className="imageParent">
+              <img alt={img.node.previewURL} src={img.node.previewURL} className="theimage" onClick={()=>{renderFullImage(img.node.largeImageURL)}} />
+          </span>
+        );
+      })
+    }
+    else {
+      return(
+      <h1>Loading...</h1>
     );
+    }
   }
 
 
-renderImages (){
-  if (this.state.imgData) {
-    return this.state.imgData.allPixabayPhoto.edges.map(img => {
-      return (
-        <span key={img.id} className="imageParent">
-          <img src={img.node.previewURL} className="theimage" onClick={()=>{this.renderFullImage(img.node.largeImageURL)}} />
-        </span>
-      );
-    })
-  }
-  else {
-    return(
-    <h1>Loading...</h1>
-  );
-  }
-}
-
-render(){
   return (
-    <>
-
-      <div>
-      <Button color="danger" onClick={this.toggle}>s</Button>
+  <>
+    <div className="max_size" style={{textAlign:'center'}}>
+      <div className="imageParent">
+        <img alt={selectedImg} src={selectedImg} style={{height:'27em'}} />
       </div>
-      {this.renderImages()}
-    </>
-    );
-  };
+      <div className="thumbnails">
+        {renderImages()}
+      </div>
+    </div>
+  </>
+  );
 }
-
-
-export default Gallery;
